@@ -1,0 +1,26 @@
+# Ambientes virtuais
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Dados
+data/*.csv
+data/*.xlsx
+!data/.gitkeep
+
+exports/*
+!exports/.gitkeep
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+
+# Variáveis de ambiente
+.env

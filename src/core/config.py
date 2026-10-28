@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path #Classe para manipulação de arquivos e pastas
 
 #1. DEFINIÇÃO DE DIRETÓRIOS
@@ -23,18 +24,15 @@ CLEAN_DATA_PATH = DATA_DIR/"cafe_sales_clean.csv"
 
 #3.1. Contrato dos dados
 
-EXPECTED_COLUMMS = {
-    "Transaction_ID":int,
-    "Item":str,
-    "Quantity":int,
-    "Price_Per_Item":float,
-
-    "Total_Spent":float,
-    "Payment_Method":str,
-
-    "Location":str,
-
-    "Transaction_Date":str,
+EXPECTED_COLUMNS = {
+    "Transaction_ID": int,
+    "Item": str,
+    "Quantity": int,
+    "Price_Per_Item": float,
+    "Total_Spent": float,
+    "Payment_Method": str,
+    "Location": str,
+    "Transaction_Date": datetime,
 }
 
 

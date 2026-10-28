@@ -10,3 +10,7 @@ requests>=2.31.0
 
 # Downloads e Integração com Kaggle
 kagglehub>=0.3.0
+
+#Gráficos e dashboards interativos
+streamlit==1.30.0
+plotly==5.18.0

@@ -15,7 +15,7 @@ O objetivo principal deste repositório é demonstrar o domínio de **boas prát
 Diferente de abordagens baseadas em Jupyter Notebooks, o sistema adota uma divisão rígida de camadas em scripts puros (`.py`), garantindo acoplamento fraco e alta coesão:
 
 ```text
-cafe_metrics_monolith/
+cafe_metrics/
 │
 ├── data/                           # Repositório de dados (Ignorado no Git)
 │   ├── cafe_sales_dirty.csv        # Dataset bruto baixado via API

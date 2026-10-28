@@ -15,7 +15,7 @@ A aplicação conta com **dois canais de apresentação desacoplados**: um paine
 O sistema adota uma divisão rígida de camadas em scripts puros (`.py`), garantindo baixo acoplamento e alta coesão. Graças a essa arquitetura, a lógica de negócios é centralizada e compartilhada entre as interfaces de Terminal e Web:
 
 ```text
-cafe_metrics_monolith/
+cafe_metrics/
 │
 ├── data/                           # Repositório de dados (Ignorado no Git)
 │   ├── cafe_sales_dirty.csv        # Dataset bruto baixado via API
@@ -96,7 +96,7 @@ Quando qualquer um dos pontos de entrada (`main.py` ou `app_web.py`) é iniciado
 1. **Clone o repositório e acesse a pasta:**
    ```bash
    git clone https://github.com
-   cd cafe-metrics-monolith
+   cd cafe-metrics
    ```
 
 2. **Crie e ative o ambiente virtual (Virtualenv):**

@@ -1,3 +1,5 @@
+# Cálculos matemáticos complexos
+numpy>=2.0
 # Manipulação e Análise de Dados
 pandas>=2.0.0
 openpyxl>=3.1.0

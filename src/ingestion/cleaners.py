@@ -1,5 +1,5 @@
 import pandas as pd
-# Importação relativa: voltamos um nível e entramos em core.config
+# Importação relativa: volta um nível e entra em core.config
 from ..core import config
 
 
@@ -18,11 +18,11 @@ def clean_sales_data(file_path: str, *, fill_strategy: str = "median") -> pd.Dat
     df = pd.read_csv(file_path)
 
     # 2. Varrendo o escopo do DataFrame atrás das strings sujas mapeadas no Core
-    # Substituímos termos como "ERROR" ou "UNKNOWN" por valores nulos reais do Pandas (NaN)
+    # Substituição de termos como "ERROR" ou "UNKNOWN" por valores nulos reais do Pandas (NaN)
     for signal in config.DIRTY_SIGNALS:
         df.replace(signal, pd.NA, inplace=True)
 
-    # 3. Aplicando os Parâmetros Avançados (Tomada de decisão arquitetural)
+    # 3. Aplicando Parâmetros Avançados
     # Dependendo do que o usuário escolheu via parâmetro nomeado, agimos de uma forma:
     if fill_strategy == "median":
         # Calcula a mediana (ignora erros) e preenche onde estava vazio
@@ -36,7 +36,28 @@ def clean_sales_data(file_path: str, *, fill_strategy: str = "median") -> pd.Dat
         # Se o desenvolvedor passar uma estratégia inválida, levantamos um erro de escopo
         raise ValueError(f"Estratégia '{fill_strategy}' não é suportada. Use 'median' ou 'mean'.")
 
-    # O restante da sua lógica de tipagem e limpeza entra aqui...
+    # 4. CONVERSÃO FORÇADA DE TIPOS (Tipagem e Robustez)
+    # conversão colunas numéricas forçando erros a virarem NaN para não quebrar o sistema
+    df["Quantity"] = pd.to_numeric(df["Quantity"], errors="coerce").fillna(1).astype(int)
+    df["Price_Per_Item"] = pd.to_numeric(df["Price_Per_Item"], errors="coerce").astype(float)
+
+    # Tratando as datas para o formato padrão do Pandas
+    df["Transaction_Date"] = pd.to_datetime(df["Transaction_Date"], errors="coerce")
+
+    # 5. RECALCULANDO REGRAS DE NEGÓCIO AFETADAS PELA LIMPEZA
+    # Recalcular para garantir consistência no módulo Analytics.
+    df["Total_Spent"] = df["Quantity"] * df["Price_Per_Item"]
+
+    # 6. HIGIENIZAÇÃO DE TEXTOS (Strings)
+    # Remove espaços em branco extras e padroniza textos para evitar que "Coffee " e "Coffee" sejam contados separados
+    df["Item"] = df["Item"].astype(str).str.strip().str.title()
+    df["Payment_Method"] = df["Payment_Method"].astype(str).str.strip().str.upper()
+    df["Location"] = df["Location"].astype(str).str.strip().str.title()
+
+    # 7. SALVAR DATASET TRATADO
+    # Salva uma cópia limpa na pasta de dados para fins de histórico
+    config.CLEAN_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(config.CLEAN_DATA_PATH, index=False)
 
     print("[INGESTÃO] Dados limpos com sucesso!")
     return df

@@ -1,8 +1,8 @@
 # Cafe Sales: Monolito Modular Python ☕🐍
 
-[![Python Version](https://shields.io)](https://python.org)
-[![Code Style](https://shields.io)](https://github.com)
-[![Architecture](https://shields.io)](https://wikipedia.org)
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-PEP%208-green?style=for-the-badge)](https://peps.python.org/pep-0008/)
+[![Architecture](https://img.shields.io/badge/Architecture-Monolith%20Modular-orange?style=for-the-badge)](https://pt.wikipedia.org/wiki/Arquitetura_de_software)
 
 Este projeto implementa um **Monolito Modular em Python Puro** para ingestão, sanitização automatizada e análise estatística de métricas de desempenho de vendas. O sistema consome o dataset real do Kaggle *Cafe Sales: Dirty Data for Cleaning Training* e serve como base arquitetural e prova de conceito (PoC) para a futura construção de um **Mapa de Métricas Integrado**.
 

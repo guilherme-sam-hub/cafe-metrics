@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91cf6870-2eec-4269-9aac-b22633539c0a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/exports/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/analytics/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/analytics/statistics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/injestion/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/output/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/injestion/loaders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cafe_metrics.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cafe_metrics.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/pyvenv.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/pyvenv.cfg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +27,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "guilherme-sam-hub"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;guilherme-sam-hub&quot;
   }
-}]]></component>
+}</component>
   <component name="GitToolBoxStore">
     <option name="recentBranches">
       <RecentBranches>
@@ -64,12 +58,71 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/guilherme-sam-hub/cafe_metrics.git",
-    "accountId": "103d9e47-db87-46e6-9684-5c9456c01664"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/guilherme-sam-hub/cafe-metrics.git&quot;,
+    &quot;accountId&quot;: &quot;aee9a9ba-0dc1-435b-9be9-264ddfa3e863&quot;
   }
-}]]></component>
+}</component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.4329175632518638" />
+      <entry key="MS500" value="3.6798942964751777" />
+      <entry key="S2" value="8.661705950404613" />
+      <entry key="S5" value="11.39129334276752" />
+      <entry key="S10" value="12.601903063618298" />
+      <entry key="S30" value="14.565050638059368" />
+      <entry key="S60" value="18.780320514842664" />
+      <entry key="M2" value="28.807603051907414" />
+      <entry key="M5" value="62.81319771563841" />
+      <entry key="M10" value="109.82137506705227" />
+      <entry key="M15" value="146.96489238157395" />
+      <entry key="M30" value="221.74045860999593" />
+      <entry key="H1" value="295.0633438002551" />
+      <entry key="H2" value="351.2985148854742" />
+      <entry key="H4" value="387.18218348529854" />
+      <entry key="D1" value="422.3112148402226" />
+      <entry key="W1" value="428.8870218798271" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="6.12081453275422E-208" />
+      <entry key="S30" value="1.8153217591475926E-69" />
+      <entry key="S60" value="9.256173119376602E-35" />
+      <entry key="M2" value="2.240687737667442E-17" />
+      <entry key="M5" value="6.303993893809678E-7" />
+      <entry key="M10" value="0.0019382441930320396" />
+      <entry key="M15" value="0.02822554094930285" />
+      <entry key="M30" value="0.4113563645971875" />
+      <entry key="H1" value="1.5708660645605976" />
+      <entry key="H2" value="3.069966885073415" />
+      <entry key="H4" value="4.2918010083074645" />
+      <entry key="D1" value="5.674125036634239" />
+      <entry key="W1" value="5.952324772247478" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.3232658757842148" />
+      <entry key="MS500" value="3.60782320569626" />
+      <entry key="S2" value="8.59907846681564" />
+      <entry key="S5" value="11.355283083705292" />
+      <entry key="S10" value="12.581351301152065" />
+      <entry key="S30" value="14.551447409153791" />
+      <entry key="S60" value="18.76306482912246" />
+      <entry key="M2" value="28.790147818347258" />
+      <entry key="M5" value="62.79847122828087" />
+      <entry key="M10" value="109.80970498483359" />
+      <entry key="M15" value="146.9797460397861" />
+      <entry key="M30" value="222.1391352102185" />
+      <entry key="H1" value="296.6233694276396" />
+      <entry key="H2" value="354.36074216895327" />
+      <entry key="H4" value="391.4692447657718" />
+      <entry key="D1" value="427.9843926792124" />
+      <entry key="W1" value="434.8392069039669" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4,
   &quot;fromUser&quot;: false
@@ -89,13 +142,21 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/guilherme/PycharmProjects/PythonProject/cafe_metrics&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;python.packages.toolwindow.project.migrated.to.right.top.v2&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
 }</component>
   <component name="SharedIndexes">
@@ -112,6 +173,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1792704017198</updated>
+      <workItem from="1793147813537" duration="6630000" />
+      <workItem from="1793155647447" duration="939000" />
     </task>
     <servers />
   </component>

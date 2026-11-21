@@ -95,7 +95,7 @@ Quando qualquer um dos pontos de entrada (`main.py` ou `app_web.py`) é iniciado
 
 1. **Clone o repositório e acesse a pasta:**
    ```bash
-   git clone https://github.com
+   git clone https://github.com/guilherme-sam-hub/cafe-metrics
    cd cafe-metrics
    ```
 

@@ -10,6 +10,27 @@ A aplicação conta com **dois canais de apresentação desacoplados**: um paine
 
 ---
 
+### 🎲 Dados
+
+O repositório inclui `data/sample_dirty_cafe.csv`, uma amostra fictícia com a
+mesma estrutura do dataset original (incluindo sujeira intencional: `ERROR`,
+`UNKNOWN`, `N/A` e duplicatas) para que o sistema rode imediatamente após o
+clone, **sem necessidade de credenciais do Kaggle**.
+
+O loader segue esta ordem de prioridade:
+
+1. `data/dirty_cafe_sales.csv` — dataset completo, se presente localmente
+2. `data/sample_cafe_dirty.csv` — amostra versionada (padrão após o clone)
+3. Download automático via `kagglehub` — requer credenciais do Kaggle
+
+Para usar o dataset completo, baixe manualmente de:
+https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training
+
+e salve como `data/dirty_cafe_sales.csv`. Ou configure suas credenciais
+(`~/.kaggle/kaggle.json`) e remova a amostra para forçar o download.
+
+---
+
 ## 🏗️ Design Arquitetural & Estrutura de Pastas
 
 O sistema adota uma divisão rígida de camadas em scripts puros (`.py`), garantindo baixo acoplamento e alta coesão. Graças a essa arquitetura, a lógica de negócios é centralizada e compartilhada entre as interfaces de Terminal e Web:

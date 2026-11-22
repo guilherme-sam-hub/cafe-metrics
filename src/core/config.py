@@ -15,9 +15,12 @@ EXPORTS_DIR = BASE_DIR/"exports"
 
 #2. DEFINIÇÃO DOS ARQUIVOS ESPECÍFICOS
 #2.1 Caminho para arquivo original
-RAW_DATA_PATH = DATA_DIR/"cafe_sales_dirty.csv"
+RAW_DATA_PATH = DATA_DIR/"dirty_cafe_sales.csv"
 
-#2.2. caminho para o arquivo tratado
+#2.1.1 Caminho para amostra versionada (permite rodar sem Kaggle)
+SAMPLE_DATA_PATH = DATA_DIR / "sample_dirty_cafe.csv"
+
+#2.2.2 Caminho para o arquivo tratado
 CLEAN_DATA_PATH = DATA_DIR/"cafe_sales_clean.csv"
 
 #3. ESQUEMA E VALIDAÇÃO DE DADOS

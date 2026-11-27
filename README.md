@@ -1,157 +1,271 @@
-# Cafe Sales: Monolito Modular & Dashboard Interativo ☕🐍📊
+# ☕ Cafe Metrics — Arquitetura em Camadas & Dashboard Interativo
 
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Code Style](https://img.shields.io/badge/Code%20Style-PEP%208-green?style=for-the-badge)](https://peps.python.org/pep-0008/)
-[![Architecture](https://img.shields.io/badge/Architecture-Monolith%20Modular-orange?style=for-the-badge)](https://pt.wikipedia.org/wiki/Arquitetura_de_software)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20Architecture-orange?style=for-the-badge)](https://pt.wikipedia.org/wiki/Arquitetura_de_software)
+[![Tests](https://img.shields.io/badge/Tests-32%2F32%20passing-brightgreen?style=for-the-badge)](https://pytest.org/)
+[![Coverage](https://img.shields.io/badge/Coverage-88%25%20Core-green?style=for-the-badge)](https://pytest-cov.readthedocs.io/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-purple?style=for-the-badge&logo=streamlit)](https://cafe-metrics-6qj2ynjj2e9mkx5vxv89sv.streamlit.app/)
 
-Este projeto implementa um **Monolito Modular em Python Puro** para ingestão, sanitização automatizada e análise estatística de métricas de desempenho de vendas. O sistema consome o dataset real do Kaggle *Cafe Sales: Dirty Data for Cleaning Training* e serve como base arquitetural e prova de conceito (PoC) para a futura construção de um **Mapa de Métricas Integrado**.
+Sistema analítico de vendas construído com **Clean Architecture** em Python puro. Ingestão automatizada, sanitização de dados sujos, motor estatístico agnóstico de UI e **dois canais de apresentação desacoplados** (CLI interativo e dashboard web).
 
-A aplicação conta com **dois canais de apresentação desacoplados**: um painel rico via linha de comando (CLI) e um dashboard web totalmente interativo com gráficos responsivos.
-
----
-
-### 🎲 Dados
-
-O repositório inclui `data/sample_dirty_cafe.csv`, uma amostra fictícia com a
-mesma estrutura do dataset original (incluindo sujeira intencional: `ERROR`,
-`UNKNOWN`, `N/A` e duplicatas) para que o sistema rode imediatamente após o
-clone, **sem necessidade de credenciais do Kaggle**.
-
-O loader segue esta ordem de prioridade:
-
-1. `data/dirty_cafe_sales.csv` — dataset completo, se presente localmente
-2. `data/sample_cafe_dirty.csv` — amostra versionada (padrão após o clone)
-3. Download automático via `kagglehub` — requer credenciais do Kaggle
-
-Para usar o dataset completo, baixe manualmente de:
-https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training
-
-e salve como `data/dirty_cafe_sales.csv`. Ou configure suas credenciais
-(`~/.kaggle/kaggle.json`) e remova a amostra para forçar o download.
+🔗 **Dashboard ao vivo**: <https://cafe-metrics-6qj2ynjj2e9mkx5vxv89sv.streamlit.app/>
 
 ---
 
-## 🏗️ Design Arquitetural & Estrutura de Pastas
+## 🎯 O Que Este Projeto Faz
 
-O sistema adota uma divisão rígida de camadas em scripts puros (`.py`), garantindo baixo acoplamento e alta coesão. Graças a essa arquitetura, a lógica de negócios é centralizada e compartilhada entre as interfaces de Terminal e Web:
+- **Ingesta** dados brutos do Kaggle (*Cafe Sales: Dirty Data for Cleaning Training*) com *fallback strategy* (local → amostra → download)
+- **Sanitiza** automaticamente sinais de sujeira (`ERROR`, `UNKNOWN`, `N/A`, `<NA>`, duplicatas)
+- **Calcula** KPIs financeiros, série temporal com variação %, detecção de anomalias por Z-score, ranking de produtos e busca linear
+- **Apresenta** os resultados via:
+  - 🖥️ **CLI interativo** com menu, histórico de relatórios (pilha LIFO) e gráficos PNG
+  - 🌐 **Dashboard web** com Streamlit + Plotly (filtros dinâmicos, gráficos responsivos)
+
+---
+
+## 🏗️ Arquitetura em Camadas
 
 ```text
-cafe_metrics/
+┌─────────────────────────────────────────────────────────────┐
+│                      ENTRY POINTS                           │
+│     main.py (CLI)              app_web.py (Streamlit)       │
+└──────────────┬──────────────────────────┬───────────────────┘
+               │                          │
+               ▼                          ▼
+┌──────────────────────────┐  ┌────────────────────────────┐
+│   OUTPUT (Adapters)      │  │   OUTPUT (Adapters)        │
+│   • cli_adapter (Rich)   │  │   • streamlit_adapter      │
+│   • matplotlib_adapter   │  │   • (Plotly interativo)    │
+└──────────────┬───────────┘  └──────────────┬─────────────┘
+               │                              │
+               └──────────────┬───────────────┘
+                              ▼
+              ┌───────────────────────────────┐
+              │   ANALYTICS (Core Puro)       │
+              │   • metricas • temporal       │
+              │   • anomalias • busca         │
+              │   • ordenacao • estruturas    │
+              └───────────────┬───────────────┘
+                              ▼
+              ┌───────────────────────────────┐
+              │   INGESTION (Dados)           │
+              │   • loader (fallback)         │
+              │   • cleaners (ETL)            │
+              └───────────────┬───────────────┘
+                              ▼
+              ┌───────────────────────────────┐
+              │   CORE (Config)               │
+              └───────────────────────────────┘
+              
+## 🧩 Princípios Aplicados
+
+| Princípio | Aplicação |
+|-----------|-----------|
+| **SRP** | Cada módulo tem uma responsabilidade única |
+| **DRY** | Lógica de negócio existe em um único lugar (Core) |
+| **Open/Closed** | Novo *entry point* sem modificar o Core |
+| **Adapter Pattern** | CLI, Matplotlib e Streamlit são adapters independentes |
+| **Command Pattern** | Menu CLI usa tabela de despacho (`ACOES`) |
+| **Fail Fast** | Validações antecipadas em todas as funções |
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
+cafe-metrics/
 │
-├── data/                           # Repositório de dados (Ignorado no Git)
-│   ├── cafe_sales_dirty.csv        # Dataset bruto baixado via API
-│   └── cafe_sales_clean.csv        # Dataset persistido pós-sanitização
+├── data/                           # Dados brutos (Git-ignored, exceto amostra)
+│   ├── .gitkeep
+│   └── sample_dirty_cafe.csv       # Amostra versionada para deploy imediato
 │
-├── exports/                        # Saídas físicas do sistema (relatórios, imagens)
+├── exports/                        # Saídas físicas (gráficos PNG, relatórios)
 │
-├── src/                            # Núcleo da Aplicação (O Monolito)
-│   ├── __init__.py                 # Inicializador do pacote raiz
+├── src/                            # Núcleo da Aplicação
+│   ├── __init__.py
 │   │
-│   ├── core/                       # Camada de Configuração Global e Constantes
+│   ├── core/                       # Camada 0: Configuração Global
 │   │   ├── __init__.py
-│   │   └── config.py               # Single Source of Truth para caminhos e metadados
+│   │   └── config.py               # Single Source of Truth (caminhos, schema, sinais)
 │   │
-│   ├── ingestion/                  # MÓDULO 1: Orquestração e Higienização de Dados
-│   │   ├── __init__.py             # Fachada do pacote (Facade Pattern)
-│   │   ├── cleaners.py             # Mapeamento do Kaggle, tratamento de nulos e tipagem
-│   │   └── loaders.py              # Integração de rede com a API do Kaggle
+│   ├── ingestion/                  # Camada 1: Ingestão e Higienização
+│   │   ├── __init__.py             # Fachada do pacote
+│   │   ├── loader.py               # Fallback Strategy (Local → Amostra → Kaggle)
+│   │   └── cleaners.py             # ETL: mapeamento de schema, tipagem, nulos
 │   │
-│   ├── analytics/                  # MÓDULO 2: Motor Estatístico (Domínio de Negócio)
-│   │   ├── __init__.py             # Fachada do pacote (Facade Pattern)
-│   │   └── statistics.py           # Agregações matemáticas puras e filtros dinâmicos
+│   ├── analytics/                  # Camada 2: Core de Negócio (agnóstico de UI)
+│   │   ├── __init__.py             # Fachada do pacote (re-exporta funções públicas)
+│   │   ├── metricas.py             # calcular_kpis() — KPIs financeiros
+│   │   ├── temporal.py             # analise_temporal() — série temporal + variação %
+│   │   ├── anomalias.py            # detectar_anomalias() — Z-score populacional (ddof=0)
+│   │   ├── busca.py                # busca_linear() — filtro vetorizado
+│   │   ├── ordenacao.py            # ordenar_por_vendas() — ranking agregado
+│   │   └── estruturas.py           # PilhaRelatorios (LIFO para histórico)
 │   │
-│   └── output/                     # MÓDULO 3: Apresentação e Visualização
-│       ├── __init__.py             # Fachada do pacote (Facade Pattern)
-│       ├── terminal_view.py        # Interface CLI rica construída com Rich
-│       └── web_view.py             # Painel Web interativo com Streamlit e Plotly
+│   └── output/                     # Camada 3: Adapters de Apresentação
+│       ├── __init__.py             # Fachada do pacote
+│       ├── cli_adapter.py          # Adapter Terminal (Rich: painéis, tabelas coloridas)
+│       ├── matplotlib_adapter.py   # Adapter Estático (PNGs para relatórios/auditoria)
+│       └── streamlit_adapter.py    # Adapter Web (Streamlit + Plotly interativo)
 │
-├── main.py                         # Ponto de entrada 1: Bootstrapper do Painel Terminal
-├── app_web.py                      # Ponto de entrada 2: Bootstrapper do Dashboard Web
-├── requirements.txt                # Dependências gerenciadas do ecossistema
-└── README.md                       # Documentação técnica
+├── tests/                          # Suíte de testes unitários
+│   ├── __init__.py
+│   ├── conftest.py                 # Fixtures compartilhadas (DataFrames sintéticos)
+│   ├── test_metricas.py
+│   ├── test_temporal.py
+│   ├── test_anomalias.py
+│   ├── test_busca.py
+│   ├── test_ordenacao.py
+│   └── test_cleaners.py
+│
+├── main.py                         # Entry Point 1: Menu interativo CLI
+├── app_web.py                      # Entry Point 2: Dashboard Streamlit
+├── pytest.ini                      # Configuração do pytest
+├── requirements.txt                # Dependências do ecossistema
+└── README.md                       # Esta documentação
 ```
 
 ---
 
-## 🛠️ Conceitos Avançados de Python Aplicados
-
-### 1. Separação de Responsabilidades (SoC) & Facade Pattern
-Cada subpasta dentro de `src` encapsula seu próprio domínio. O uso estratégico dos arquivos `__init__.py` expõe apenas as funções necessárias para a superfície através do atributo `__all__`. Isso permite que o sistema mude de interface sem tocar na lógica de higienização de dados.
-
-### 2. Contratos Previsíveis com Keyword-Only Arguments (`*`)
-No módulo de limpeza (`cleaners.py`), a assinatura da função força o desenvolvedor a nomear argumentos de decisão arquitetural, impedindo passagens acidentais por posição:
-```python
-def clean_sales_data(file_path: str, *, fill_strategy: str = "median") -> pd.DataFrame:
-```
-
-### 3. Filtros Dinâmicos com `**kwargs` e Desempacotamento
-O motor estatístico (`statistics.py`) utiliza o desempacotamento dinâmico para aceitar qualquer combinação de filtros baseados nas colunas do dataset. Esses filtros são mapeados diretamente a partir dos seletores visuais do Streamlit ou parâmetros de linha de comando:
-```python
-def calcular_metricas_vendas(df: pd.DataFrame, *metricas_desejadas: str, **filtros: Any) -> Dict[str, Any]:
-```
-
-### 4. Resolução de Divergência de Esquemas (Data Schema Mapping)
-O pipeline conta com uma camada defensiva que captura o cabeçalho original do Kaggle (`Price Per Unit`) e o traduz imediatamente para o contrato interno padronizado do sistema (`Price_Per_Item`), blindando o motor analítico contra quebras de layout externo.
-
----
-
-## 📊 O Pipeline de Execução (Data Flow)
-
-Quando qualquer um dos pontos de entrada (`main.py` ou `app_web.py`) é iniciado, o sistema executa os seguintes passos ordenadamente:
-
-1. **`loaders.garantir_dataset_local()`**: Verifica o ambiente local. Se o arquivo não existir, conecta-se à API do Kaggle via `kagglehub` e baixa os dados.
-2. **`cleaners.clean_sales_data()`**: Remove os sinais de dados sujos (`"ERROR"`, `"UNKNOWN"`), aplica a estratégia matemática (`mean` ou `median`), força a tipagem correta de cada coluna e recalcula o `Total_Spent`.
-3. **`statistics.calcular_metricas_vendas()`**: Isola e filtra o DataFrame dinamicamente através de dicionários desempacotados.
-4. **`output` (Apresentação)**: Renderiza os dados no canal escolhido pelo usuário (Console ou Navegador).
-
----
-
-## 🚀 Como Executar o Projeto
+## 🚀 Instalação e Execução
 
 ### Pré-requisitos
-* Python 3.10 ou superior instalado.
-* Ambiente virtual configurado e ativo.
+
+- Python 3.10 ou superior
+- Git instalado
+- (Opcional) Credenciais do Kaggle para o dataset completo
 
 ### Passo a Passo
 
-1. **Clone o repositório e acesse a pasta:**
-   ```bash
-   git clone https://github.com/guilherme-sam-hub/cafe-metrics
-   cd cafe-metrics
-   ```
+```bash
+# 1. Clone o repositório
+git clone https://github.com/guilherme-sam-hub/cafe-metrics.git
+cd cafe-metrics
 
-2. **Crie e ative o ambiente virtual (Virtualenv):**
-   ```bash
-   python -m venv .venv
-   # No Linux/Mac:
-   source .venv/bin/activate
-   # No Windows (Prompt de Comando):
-   .venv\Scripts\activate
-   ```
+# 2. Crie e ative o ambiente virtual
+python -m venv .venv
+source .venv/bin/activate          # Linux/Mac
+.venv\Scripts\activate             # Windows (PowerShell)
 
-3. **Instale todas as dependências do ecossistema:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# 3. Instale as dependências
+pip install -r requirements.txt
 
-4. **Execução Canal 1 - Dashboard no Terminal (CLI):**
-   ```bash
-   python main.py
-   ```
+# 4. Execute o CLI interativo
+python main.py
 
-5. **Execução Canal 2 - Dashboard Interativo na Web (Streamlit):**
-   ```bash
-   streamlit run app_web.py
-   ```
+# 5. Execute o dashboard web
+streamlit run app_web.py
+```
 
 ---
 
-## 🔮 Próximos Passos (Evolução da Arquitetura)
+## 🧪 Testes Unitários
 
-Este monolito modular foi desenhado seguindo princípios de **DDD (Domain-Driven Design)** de forma simplificada. Devido ao isolamento rígido dos pacotes, o sistema está totalmente pronto para os seguintes próximos passos:
-*   [ ] **Migração para Microsserviços**: Desacoplar o módulo `analytics` para um microsserviço independente exposto via FastAPI ou gRPC.
-*   [ ] **Testes de Regressão**: Implementação de testes unitários com `pytest` para validar a idempotência da limpeza de dados.
+O Core Analytics é **100% testável com DataFrames sintéticos** (sem I/O, sem rede).
+
+```bash
+# Instale o pytest-cov (se ainda não tiver)
+pip install pytest-cov
+
+# Rode todos os testes com cobertura
+pytest --cov=src --cov-report=term-missing
+```
+
+### Cobertura Atual
+
+| Módulo | Cobertura |
+|--------|-----------|
+| `src/analytics/metricas.py` | 100% |
+| `src/analytics/temporal.py` | 100% |
+| `src/analytics/busca.py` | 100% |
+| `src/analytics/anomalias.py` | 92% |
+| `src/analytics/ordenacao.py` | 86% |
+| `src/ingestion/cleaners.py` | 100% |
+| **Média do Core** | **~88%** |
 
 ---
 
-Desenvolvido por [guilherme-sam-hub]
+## 📊 Dataset
+
+O projeto usa o dataset [Cafe Sales: Dirty Data for Cleaning Training](https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training) do Kaggle.
+
+### Fallback Strategy do Loader
+
+1. `data/dirty_cafe_sales.csv` — dataset completo, se presente localmente
+2. `data/sample_dirty_cafe.csv` — amostra versionada (padrão após o clone)
+3. Download automático via `kagglehub` — requer credenciais do Kaggle
+
+### Usando o Dataset Completo
+
+**Opção A — Download manual:**
+
+1. Baixe de <https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training>
+2. Salve como `data/dirty_cafe_sales.csv`
+
+**Opção B — Via API (requer credenciais):**
+
+1. Gere um token em <https://www.kaggle.com/settings> → API
+2. Configure as variáveis de ambiente:
+
+```bash
+export KAGGLE_USERNAME="seu_usuario"
+export KAGGLE_KEY="sua_chave"
+```
+
+3. Remova `data/sample_dirty_cafe.csv` para forçar o download
+
+---
+
+## ☁️ Deploy no Streamlit Cloud
+
+Este projeto está deployado e rodando ao vivo em:
+
+👉 <https://cafe-metrics-6qj2ynjj2e9mkx5vxv89sv.streamlit.app/>
+
+### Como Reproduzir o Deploy
+
+1. Acesse <https://share.streamlit.io> e faça login com GitHub
+2. Clique em **"New app"**
+3. Configure:
+   - **Repository**: `guilherme-sam-hub/cafe-metrics`
+   - **Branch**: `main`
+   - **Main file path**: `app_web.py`
+4. (Opcional) Em **Advanced settings → Secrets**, adicione:
+
+```toml
+KAGGLE_USERNAME = "seu_usuario"
+KAGGLE_KEY = "sua_chave"
+```
+
+---
+
+## 🧠 Decisões Técnicas Notáveis
+
+| Decisão | Justificativa |
+|---------|---------------|
+| `ddof=0` no desvio padrão | Trata a série temporal como população completa (não amostra) |
+| `pct_change(fill_method=None)` | Evita `FutureWarning` do Pandas 2.2+ |
+| `na_values=config.DIRTY_SIGNALS` no `read_csv` | Saneamento vetorizado em C — muito mais rápido que loop Python |
+| `matplotlib.use("Agg")` no topo | Backend *headless* obrigatório para ambientes sem display (CI, servidores) |
+| `plt.close(fig)` após cada `savefig` | Previne *memory leaks* na geração de múltiplos gráficos |
+| `@st.cache_data` no `_carregar_dados()` | Garante que a ingestão rode apenas 1× por sessão Streamlit |
+| Recálculo de `Total_Spent` | Garante integridade matemática (Qtd × Preço) mesmo se o CSV original tiver erro |
+| `PilhaRelatorios` (LIFO) | Modela navegação "voltar" no CLI sem acoplar estado ao menu |
+
+---
+
+## 🔮 Próximos Passos
+
+- Testes de integração para os adapters (mock de `rich.Console`, `st.plotly_chart`)
+- Exportação de relatórios em PDF reutilizando `matplotlib_adapter.py` + `reportlab`
+- Adapter de Telegram para envio diário de KPIs via bot
+- CI/CD com GitHub Actions para rodar testes automaticamente a cada push
+- Migração para **FastAPI** expondo o Core como microsserviço REST
+
+---
+
+## 📜 Licença & Créditos
+
+- **Dataset original**: Ahmed Mohamed — [Cafe Sales: Dirty Data for Cleaning Training](https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training) (Kaggle, CC0).
+- **Desenvolvido por**: [guilherme-sam-hub](https://github.com/guilherme-sam-hub)

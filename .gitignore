@@ -1,50 +1,65 @@
-# Ambientes virtuais
-venv/
-env/
-.venv/
-
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.egg-info/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+.installed.cfg
+*.egg
+
+# Ambiente virtual
+.venv/
+venv/
+ENV/
+env/
+path/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
 
 # Jupyter
-.ipynb_checkpoints/
+.ipynb_checkpoints
 
-# Dados (csv/xlsx em qualquer subpasta)
-data/**/*.csv
-data/**/*.xlsx
-!data/.gitkeep
-!data/sample_dirty_cafe.csv
+# Testes e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
 
-exports/**/*
-!exports/.gitkeep
-
-# Chaves SSH (NUNCA versionar)
-notebookTia
-notebookTia.pub
-*.pem
-id_rsa
-id_rsa.pub
-id_ed25519
-id_ed25519.pub
-
-# IDE / SO
-.vscode/
-.idea/
-*.iml
+# OS
 .DS_Store
 Thumbs.db
 
-# Variáveis de ambiente
-.env
-.env.*
+# Dados brutos (opcional — recomendo NÃO subir o dataset grande)
+data/*.csv
+!data/.gitkeep
 
-# Logs / temporários
-*.log
-*.tmp
-.coverage
-htmlcov/
+# Kaggle credentials
+~/.kaggle/
+.kaggle/
+
+# Secrets
+.env
+*.env
+secrets.toml

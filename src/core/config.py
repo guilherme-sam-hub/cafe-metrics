@@ -1,32 +1,38 @@
+"""
+Configurações globais e constantes do projeto Cafe Sales.
+Centraliza caminhos, esquemas de dados e parâmetros de ingestão.
+"""
+
 from datetime import datetime
-from pathlib import Path #Classe para manipulação de arquivos e pastas
+from pathlib import Path
+import numpy as np  # Adicionado para tipagem correta do Pandas
 
-#1. DEFINIÇÃO DE DIRETÓRIOS
+# 1. DEFINIÇÃO DE DIRETÓRIOS
 
-#1.1. Caminho absoluto
-# a) (__file__) guarda o caminho deste arquivo
-# b) .resolve transforma esse caminho em um caminho absoluto (completo)
-# c) .parents[2] volta para a pasta raiz (ponto de referência fixo)
+# 1.1. Caminho absoluto da raiz do projeto
+# (__file__) -> src/core/config.py
+# .parents[2] -> Sobe 3 níveis (core -> src -> raiz)
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-#1.2. Caminhos para as pastas de dados brutos e exportação
-DATA_DIR = BASE_DIR/"data"
-EXPORTS_DIR = BASE_DIR/"exports"
+# 1.2. Pastas principais
+DATA_DIR = BASE_DIR / "data"
+EXPORTS_DIR = BASE_DIR / "exports"
 
-#2. DEFINIÇÃO DOS ARQUIVOS ESPECÍFICOS
-#2.1 Caminho para arquivo original
-RAW_DATA_PATH = DATA_DIR/"dirty_cafe_sales.csv"
+# Garante que as pastas existam
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-#2.1.1 Caminho para amostra versionada (permite rodar sem Kaggle)
+# 2. DEFINIÇÃO DOS ARQUIVOS ESPECÍFICOS
+
+
+RAW_DATA_PATH = DATA_DIR / "dirty_cafe_sales.csv"
 SAMPLE_DATA_PATH = DATA_DIR / "sample_dirty_cafe.csv"
+CLEAN_DATA_PATH = DATA_DIR / "cafe_sales_clean.csv"
 
-#2.2.2 Caminho para o arquivo tratado
-CLEAN_DATA_PATH = DATA_DIR/"cafe_sales_clean.csv"
+# 3. ESQUEMA E VALIDAÇÃO DE DADOS
 
-#3. ESQUEMA E VALIDAÇÃO DE DADOS
-
-#3.1. Contrato dos dados
-
+# Contrato de tipos esperado APÓS a limpeza (no DataFrame final).
+# Nota: np.datetime64 para alinhar com o dtype nativo do Pandas.
 EXPECTED_COLUMNS = {
     "Transaction_ID": int,
     "Item": str,
@@ -35,16 +41,17 @@ EXPECTED_COLUMNS = {
     "Total_Spent": float,
     "Payment_Method": str,
     "Location": str,
-    "Transaction_Date": datetime,
+    "Transaction_Date": np.datetime64,
 }
 
+# 4. IDENTIFICAÇÃO DA "SUJEIRA" DOS DADOS
 
-#4. IDENTIFICAÇÃO DA "SUJEIRA DOS DADOS
+# Sinais que o cleaner deve converter em pd.NA / np.nan
+DIRTY_SIGNALS = [
+    "ERROR", "UNKNOWN", "N/A", "NA", "NaN", "Nan",
+    "<Na>", "<NA>", "null", "Null", "NULL", "None", "none", ""
+]
 
-#4.1. Para o script de limpeza encontrar e tratar os erros.
-DIRTY_SIGNALS = ["ERROR", "UNKNOWN", "N/A", "NaN", "null"]
+# 5. CONFIGURAÇÃO DE DOWNLOAD (KAGGLE)
 
-#5. CONFIGURAÇÃO DE DOWNLOAD (KAGGLE)
-
-#5.1. Para baixar o dataset original via API do Kaggle
 KAGGLE_DATASET_ID = "ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training"

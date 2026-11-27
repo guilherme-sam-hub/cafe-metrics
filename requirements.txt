@@ -1,7 +1,9 @@
 # Cálculos matemáticos complexos
-numpy>=1.26,<2.0
+numpy>=1.26.4,<2.0
+
 # Manipulação e Análise de Dados
-pandas>=2.0.0
+# O piso 2.2.3 evita wheels de pandas compiladas contra NumPy 2.x
+pandas>=2.2.3
 openpyxl>=3.1.0
 
 # Interface e Formatação no Terminal
@@ -11,8 +13,9 @@ rich>=13.0.0
 requests>=2.31.0
 
 # Downloads e Integração com Kaggle
-kagglehub>=0.3.0
+kagglehub>=0.3.0,<1.0
 
-#Gráficos e dashboards interativos
+# Gráficos e dashboards interativos
+matplotlib>=3.8,<4.0
 streamlit>=1.40
 plotly==5.18.0
